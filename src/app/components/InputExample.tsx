@@ -1,5 +1,5 @@
 import { TextFieldInput } from "@radix-ui/themes"
-import { Ref, forwardRef, useState } from "react"
+import { Ref, forwardRef } from "react"
 import { useField } from 'formik'
 import { useRifm } from "rifm"
 
@@ -10,10 +10,11 @@ import { useRifm } from "rifm"
 
 type Props = {
   name: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
+  className?: string
 }
 
-const InputExample = forwardRef(({ name = '', onChange, ...props}: Props, ref: Ref<HTMLInputElement>) => {
+const InputExample = forwardRef(({ name = '', className, onChange, ...props}: Props, ref: Ref<HTMLInputElement>) => {
     
     const [field, meta, helpers] = useField(name)
 
@@ -26,7 +27,8 @@ const InputExample = forwardRef(({ name = '', onChange, ...props}: Props, ref: R
       value: field.value,
       onChange: (v) => {
         helpers.setValue(v);
-        onChange(v);
+        if(!onChange) return;
+        onChange(v)
       },
       format: numberFormat
     })
@@ -34,6 +36,7 @@ const InputExample = forwardRef(({ name = '', onChange, ...props}: Props, ref: R
     return (
       <>
       <TextFieldInput
+      className={className}
       name={name}
       onChange={rifm.onChange}
       value={rifm.value}
